@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
         'js_auth' => \App\Http\Middleware\AuthenticateJobSeeker::class,
         'jp_auth' => \App\Http\Middleware\AuthenticateJobProvider::class,
+        'ad_auth' => \App\Http\Middleware\AuthenticateAdmin::class,
         'is_logged_in' => \App\Http\Middleware\IsLoggedIn::class,
     ];
 }

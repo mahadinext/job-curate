@@ -14,6 +14,7 @@ use App\Http\Controllers\v1\JobSeeker\ResumeBuilderController;
 use App\Http\Controllers\v1\JobSeeker\JobStatusNotificationController;
 use App\Http\Controllers\v1\JobSeeker\AuthController as JsAuthController;
 use App\Http\Controllers\v1\JobProvider\AuthController as JpAuthController;
+use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +140,37 @@ Route::prefix('job-provider')->group(function () {
             Route::controller(ResumeBuilderController::class)->group(function () {
                 Route::get('/view/applicants-resume/{applicantsId}/{fileName?}', 'viewResume')->name('view-resume');
                 Route::get('/download/applicants-resume/{applicantsId}', 'downloadResume')->name('download-resume');
+            });
+        // });
+    });
+});
+
+Route::prefix('admin')->group(function () {
+    Route::controller(AdAuthController::class)->group(function () {
+        Route::post('/signin', 'adSignin')->name('ad-signin');
+        Route::post('/post-registration', 'adPostRegistration')->name('ad-register.post');
+        Route::post('/data/validate', 'adValidation')->name('ad-validate-data');
+        Route::get('/account/verify/{token}', 'adVerifyAccount')->name('ad-user.verify');
+        Route::get('/signout', 'adSignOut')->name('ad-signout');
+
+        Route::middleware('is_logged_in')->group(function () {
+            Route::get('/signin-page', 'adSigninPage')->name('ad-signin-page');
+            Route::get('/registration-page', 'adRegistrationPage')->name('ad-registration-page');
+        });
+
+        Route::middleware('ad_auth')->group(function () {
+            // Route::middleware('is_verify_email')->group(function () {
+                Route::prefix('/dashboard')->group(function () {
+                    Route::get('/', 'adDashboard')->name('ad-dashboard');
+                });
+            // });
+        });
+    });
+
+    Route::middleware('ad_auth')->group(function () {
+        // Route::middleware('is_verify_email')->group(function () {
+            Route::controller(JobPostController::class)->group(function () {
+                Route::get('/job-post', 'jobPostPage')->name('job-post-page');
             });
         // });
     });
