@@ -47,7 +47,7 @@ Route::prefix('job-seeker')->group(function () {
         });
 
         Route::middleware('js_auth')->group(function () {
-            // Route::middleware('is_verify_email')->group(function () {
+            // Route::middleware('is_js_email_verified')->group(function () {
                 Route::prefix('/dashboard')->group(function () {
                     Route::get('/', 'jsDashboard')->name('js-dashboard');
                 });
@@ -56,7 +56,7 @@ Route::prefix('job-seeker')->group(function () {
     });
 
     Route::middleware('js_auth')->group(function () {
-        // Route::middleware('is_verify_email')->group(function () {
+        // Route::middleware('is_js_email_verified')->group(function () {
             Route::controller(ResumeBuilderController::class)->group(function () {
                 Route::get('/my-resume', 'myResumePage')->name('resume-builder-page');
                 Route::get('/resume', 'showResume')->name('show-resume');
@@ -115,7 +115,7 @@ Route::prefix('job-provider')->group(function () {
         });
 
         Route::middleware('jp_auth')->group(function () {
-            // Route::middleware('is_verify_email')->group(function () {
+            // Route::middleware('is_jp_email_verified')->group(function () {
                 Route::prefix('/dashboard')->group(function () {
                     Route::get('/', 'jpDashboard')->name('jp-dashboard');
                 });
@@ -124,7 +124,7 @@ Route::prefix('job-provider')->group(function () {
     });
 
     Route::middleware('jp_auth')->group(function () {
-        // Route::middleware('is_verify_email')->group(function () {
+        // Route::middleware('is_jp_email_verified')->group(function () {
             Route::controller(JobPostController::class)->group(function () {
                 Route::get('/job-post', 'jobPostPage')->name('job-post-page');
                 Route::post('/job-post/add', 'addJobPost')->name('add-job-post');

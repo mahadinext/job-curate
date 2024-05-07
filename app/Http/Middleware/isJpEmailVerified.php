@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsVerifyEmail
+class isJpEmailVerified
 {
     /**
      * Handle an incoming request.
@@ -22,7 +22,7 @@ class IsVerifyEmail
         if (Auth::user()->email_verified_at === null) {
             auth()->logout();
             Log::error("Email is not verified");
-            return redirect()->route('js-signin-page')
+            return redirect()->route('jp-signin-page')
                     ->with('signinErrorMessage', 'You need to confirm your account. We have sent you an activation link, please check your email.');
         }
 
