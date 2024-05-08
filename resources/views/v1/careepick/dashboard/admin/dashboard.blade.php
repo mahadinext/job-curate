@@ -1,8 +1,8 @@
-@extends('v1.careepick.dashboard.layouts.master')
+@extends('v1.careepick.dashboard.layouts.ad-master')
 @section('content')
     <!-- Dashboard -->
     <div class="upper-title-box">
-        <h3>Howdy, Invision!</h3>
+        <h3>Howdy, {{ Auth::user()->name  }}!</h3>
         <div class="text">Ready to jump back in?</div>
     </div>
     <div class="row">

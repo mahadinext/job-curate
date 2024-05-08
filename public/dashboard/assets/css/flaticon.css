@@ -23,7 +23,7 @@
 }
 
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
   font-family: Flaticon;
   font-style: normal;
 }
@@ -112,7 +112,7 @@
 .flaticon-substract:before { content: "\f151"; }
 .flaticon-phone-call:before { content: "\f152"; }
 .flaticon-monitor:before { content: "\f153"; }
-.flaticon-menu-1:before { content: "\f154"; }
+.flaticon-menu-1:before { content: "\f142"; }
 .flaticon-cancel:before { content: "\f155"; }
 .flaticon-24-hours:before { content: "\f156"; }
 .flaticon-t-shirt-outline:before { content: "\f157"; }

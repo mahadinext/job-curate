@@ -39,7 +39,7 @@ class AuthController extends Controller
      *
      * @return view
      */
-    public function jpRegistrationPage(): view
+    public function adRegistrationPage(): view
     {
         $employeeSizeData = EmployeeSize::select("*")->get();
         $employmentTypeData = EmploymentType::all();
@@ -56,7 +56,7 @@ class AuthController extends Controller
             'upazilaData' => $upazilaData,
         ];
 
-        return view('v1.careepick.pages.auth.job-provider.registar', $data);
+        return view('v1.careepick.pages.auth.admin.registar', $data);
     }
 
     /**
@@ -64,9 +64,9 @@ class AuthController extends Controller
      *
      * @return view
      */
-    public function jpSigninPage(): view
+    public function adSigninPage(): view
     {
-        return view('v1.careepick.pages.auth.job-provider.signin');
+        return view('v1.careepick.pages.auth.admin.signin');
     }
 
     /**
@@ -74,7 +74,7 @@ class AuthController extends Controller
      *
      * @return response()
      */
-    public function jpPostRegistration(Request $request)
+    public function adPostRegistration(Request $request)
     {
         try {
             // dd($request);
@@ -111,7 +111,7 @@ class AuthController extends Controller
             // ];
             // Mail::to($request->email)->send(new VerifyEmail($mailData));
 
-            return Redirect()->route('jp-signin-page')->with('registrationMessage', 'You have been registered, please signin to your account.');
+            return Redirect()->route('ad-signin-page')->with('registrationMessage', 'You have been registered, please signin to your account.');
             return Redirect()->back()->with('registrationMessage', 'A verification mail has been sent to your email address, please confirm your mail account.');
             // dd("Email is sent successfully.");
 
@@ -126,7 +126,7 @@ class AuthController extends Controller
      *
      * @param Request $request
      */
-    public function jpValidation(Request $request)
+    public function adValidation(Request $request)
     {
         try {
             $response = $this->ajaxValidation($request);
@@ -213,7 +213,7 @@ class AuthController extends Controller
      *
      * @return response()
      */
-    public function jpVerifyAccount($token)
+    public function adVerifyAccount($token)
     {
         $verifyUser = UserVerify::where('token', $token)->first();
 
@@ -229,20 +229,20 @@ class AuthController extends Controller
                 $message = "Your e-mail is verified. You can now login.";
                 $user = User::where('id', $verifyUser->user_id)->first();
                 Auth::login($user);
-                return redirect()->route('jp-dashboard')->with('message', "YO");
+                return redirect()->route('ad-dashboard')->with('message', "YO");
             } else {
                 $message = "Your e-mail is already verified. You can now login.";
                 $user = User::where('id', $verifyUser->user_id)->first();
                 Auth::login($user);
-                return redirect()->route('jp-dashboard')->with('message', "YO");
+                return redirect()->route('ad-dashboard')->with('message', "YO");
             }
         }
         // dd($message);
 
-        return redirect()->route('jp-registration-page')->with('message', $message);
+        return redirect()->route('ad-registration-page')->with('message', $message);
     }
 
-    public function jpSignin(Request $request)
+    public function adSignin(Request $request)
     {
         $validator = $request->validate([
             'email' => 'required',
@@ -273,8 +273,8 @@ class AuthController extends Controller
 
                 $userType = auth()->user()->user_type;
 
-                if ($userType == 2) {
-                    return redirect()->route('jp-dashboard')->with('message', "YO");
+                if ($userType == 3) {
+                    return redirect()->route('ad-dashboard')->with('message', "YO");
                 }
                 // return $this->createNewToken($token);
             }
@@ -287,7 +287,7 @@ class AuthController extends Controller
         }
     }
 
-    public function jpDetails()
+    public function adDetails()
     {
         return response()->json([
             'success' => true,
@@ -295,16 +295,16 @@ class AuthController extends Controller
         ]);
     }
 
-    public function jpDashboard()
+    public function adDashboard()
     {
         if (Auth::check()) {
-            return view('v1.careepick.dashboard.job-provider.dashboard');
+            return view('v1.careepick.dashboard.admin.dashboard');
         }
 
-        return redirect()->route("jp-signin-page")->withSuccess('You are not allowed to access');
+        return redirect()->route("ad-signin-page")->withSuccess('You are not allowed to access');
     }
 
-    public function jpSignOut()
+    public function adSignOut()
     {
         Session::flush();
         Auth::logout();
@@ -392,13 +392,13 @@ class AuthController extends Controller
         $fileExtension = strtolower($file->getClientOriginalExtension());
         $fileName = "profile_image." . $fileExtension;
 
-        $path = public_path('dashboard/assets/images/job-provider/' . $this->user['id']);
+        $path = public_path('dashboard/assets/images/admin/' . $this->user['id']);
 
         $this->createDirectory($path);
 
         // ResizeImage::make($file)->resize(300, 200)->save(public_path($filePath));
         if ($file->move($path, $fileName)) {
-            $filePath = 'dashboard/assets/images/job-provider/' . $this->user['id'] . '/' . $fileName;
+            $filePath = 'dashboard/assets/images/admin/' . $this->user['id'] . '/' . $fileName;
         }
 
         return $filePath;

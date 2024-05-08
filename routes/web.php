@@ -15,6 +15,7 @@ use App\Http\Controllers\v1\JobSeeker\JobStatusNotificationController;
 use App\Http\Controllers\v1\JobSeeker\AuthController as JsAuthController;
 use App\Http\Controllers\v1\JobProvider\AuthController as JpAuthController;
 use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
+use App\Http\Controllers\v1\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,8 +170,9 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('ad_auth')->group(function () {
         // Route::middleware('is_verify_email')->group(function () {
-            Route::controller(JobPostController::class)->group(function () {
-                Route::get('/job-post', 'jobPostPage')->name('job-post-page');
+            Route::controller(AdminController::class)->group(function () {
+                Route::get('/all-recruiters', 'recruitersPage')->name('all-recruiters-page');
+                Route::get('/all-employees', 'employeesPage')->name('all-employees-page');
             });
         // });
     });

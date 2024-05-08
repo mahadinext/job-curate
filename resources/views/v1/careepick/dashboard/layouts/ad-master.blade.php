@@ -15,7 +15,7 @@
     <!-- Preloader -->
     <div class="preloader"></div>
 
-    @include('v1.careepick.dashboard.layouts.jp-topbar')
+    @include('v1.careepick.dashboard.layouts.ad-topbar')
 
     <div id="toastr-alerts-container"></div>
 
