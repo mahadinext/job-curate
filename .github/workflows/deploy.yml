@@ -26,7 +26,11 @@ jobs:
         FTP_PASSWORD: 3CQA1NLTW
       run: |
         lftp -e "
-        open sftp://$SFTP_USERNAME:$SFTP_PASSWORD@$SFTP_SERVER;
+        set ftp:ssl-allow true;
+        set ftp:ssl-force true;
+        set ftp:ssl-protect-data true;
+        set ssl:verify-certificate no;
+        open -u $FTP_USERNAME,$FTP_PASSWORD ftps://$FTP_SERVER;
         mirror -R . /home/jobcurate/dev.jobcurate.com;
         bye;
         "
