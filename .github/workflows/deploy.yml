@@ -16,6 +16,9 @@ jobs:
     - name: Install FTP client
       run: sudo apt-get install ftp
 
+    - name: Install lftp
+      run: sudo apt-get update && sudo apt-get install -y lftp
+
     - name: Deploy to FTP server
       env:
         FTP_SERVER: dev.jobcurate.com
