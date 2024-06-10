@@ -1,0 +1,30 @@
+name: Deploy to dev.jobcurate.com
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install FTP client
+      run: sudo apt-get install ftp
+
+    - name: Deploy to FTP server
+      env:
+        FTP_SERVER: dev.jobcurate.com
+        FTP_USERNAME: dev_jobcurate
+        FTP_PASSWORD: 3CQA1NLTW
+      run: |
+        lftp -e "
+        open $FTP_SERVER;
+        user $FTP_USERNAME $FTP_PASSWORD;
+        mirror -R . /home/jobcurate/dev.jobcurate.com;
+        bye;
+        "
