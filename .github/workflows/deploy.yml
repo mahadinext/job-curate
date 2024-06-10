@@ -13,8 +13,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install FTP client
-      run: sudo apt-get install ftp
+    # - name: Install FTP client
+    #   run: sudo apt-get install ftp
 
     - name: Install lftp
       run: sudo apt-get update && sudo apt-get install -y lftp
@@ -26,8 +26,7 @@ jobs:
         FTP_PASSWORD: 3CQA1NLTW
       run: |
         lftp -e "
-        open $FTP_SERVER;
-        user $FTP_USERNAME $FTP_PASSWORD;
+        open sftp://$SFTP_USERNAME:$SFTP_PASSWORD@$SFTP_SERVER;
         mirror -R . /home/jobcurate/dev.jobcurate.com;
         bye;
         "
