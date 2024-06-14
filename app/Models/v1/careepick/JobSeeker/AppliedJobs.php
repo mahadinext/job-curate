@@ -92,28 +92,57 @@ class AppliedJobs extends Model
         return new Collection($processedData);
     }
 
-    public static function getJobApplicationsForEmployee($employeeId)
+    // public static function getJobApplicationsForEmployee($employeeId)
+    // {
+    //     $processedData = [];
+
+    //     self::with(['jobInfo', 'jobSeeker', 'jobProvider', 'jobApplicationStatus'])
+    //         ->where('js_id', $employeeId)
+    //         ->chunk(100, function ($jobs) use (&$processedData) {
+    //             foreach ($jobs as $job) {
+    //                 // $processedData[] = (object) [$job];
+    //                 $processedData[] = (object) [
+    //                     'id' => $job->id,
+    //                     'job_title' => $job->jobInfo->job_title,
+    //                     'company_name' => $job->jobProvider->company_name,
+    //                     'company_id' => $job->jobProvider->id,
+    //                     'deadline' => $job->jobInfo->deadline,
+    //                     'date_applied' => $job->created_at,
+    //                     'application_status_id' => $job->job_application_status,
+    //                     'application_status' => optional($job->jobApplicationStatus)->status,
+    //                 ];
+    //             }
+    //         });
+
+    //         return new Collection($processedData);
+    // }
+    public static function getJobApplicationsForEmployee($employeeId, $statusFilter = null, $dateFilter = 'desc')
     {
+        $query = self::with(['jobInfo', 'jobSeeker', 'jobProvider', 'jobApplicationStatus'])
+            ->where('js_id', $employeeId);
+
+        if ($statusFilter) {
+            $query->where('job_application_status_id', $statusFilter);
+        }
+
+        $query->orderBy('created_at', $dateFilter);
+
+        $jobs = $query->get();
         $processedData = [];
 
-        self::with(['jobInfo', 'jobSeeker', 'jobProvider', 'jobApplicationStatus'])
-            ->where('js_id', $employeeId)
-            ->chunk(100, function ($jobs) use (&$processedData) {
-                foreach ($jobs as $job) {
-                    // $processedData[] = (object) [$job];
-                    $processedData[] = (object) [
-                        'id' => $job->id,
-                        'job_title' => $job->jobInfo->job_title,
-                        'company_name' => $job->jobProvider->company_name,
-                        'company_id' => $job->jobProvider->id,
-                        'deadline' => $job->jobInfo->deadline,
-                        'date_applied' => $job->created_at,
-                        'application_status_id' => $job->job_application_status,
-                        'application_status' => optional($job->jobApplicationStatus)->status,
-                    ];
-                }
-            });
+        foreach ($jobs as $job) {
+            $processedData[] = (object) [
+                'id' => $job->id,
+                'job_title' => $job->jobInfo->job_title,
+                'company_name' => $job->jobProvider->company_name,
+                'company_id' => $job->jobProvider->id,
+                'deadline' => $job->jobInfo->deadline,
+                'date_applied' => $job->created_at,
+                'application_status_id' => $job->job_application_status,
+                'application_status' => optional($job->jobApplicationStatus)->status,
+            ];
+        }
 
-            return new Collection($processedData);
+        return new Collection($processedData);
     }
 }

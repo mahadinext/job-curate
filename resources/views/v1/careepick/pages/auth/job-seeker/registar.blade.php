@@ -42,16 +42,28 @@
                                                     <div class="mb-4 col-md-4 col-sm-6 col-xs-12">
                                                         <label>Name <span class="text-danger">*</span></label>
                                                         <input name="name" type="text" class="form-control" placeholder="">
+                                                        @if ($errors->has('name'))
+                                                            <span
+                                                                class="text-danger">{{ $errors->first('name') }}</span>
+                                                        @endif
                                                     </div>
                                                     <div class="mb-4 col-md-4 col-sm-6 col-xs-12">
                                                         <label>Email <span class="text-danger">*</span></label>
                                                         <input name="email" type="email" class="form-control"
                                                             placeholder="">
+                                                        @if ($errors->has('email'))
+                                                            <span
+                                                                class="text-danger">{{ $errors->first('email') }}</span>
+                                                        @endif
                                                     </div>
                                                     <div class="mb-4 col-md-4 col-sm-6 col-xs-12">
                                                         <label>Phone Number <span class="text-danger">*</span></label>
                                                         <input name="phone_no" type="text"
                                                             class="form-control" placeholder="">
+                                                        @if ($errors->has('phone_no'))
+                                                            <span
+                                                                class="text-danger">{{ $errors->first('phone_no') }}</span>
+                                                        @endif
                                                     </div>
                                                     {{-- <div class="mb-4 col-md-4 col-sm-6 col-xs-12 m-clear">
                                                         <label>Gender <span class="text-danger">*</span></label>
@@ -65,6 +77,10 @@
                                                         <label>Password <span class="text-danger">*</span></label>
                                                         <input name="password" type="password"
                                                             class="form-control company_password" placeholder="">
+                                                        @if ($errors->has('password'))
+                                                            <span
+                                                                class="text-danger">{{ $errors->first('password') }}</span>
+                                                        @endif
                                                     </div>
                                                     {{-- <div class="mb-4 col-md-6 col-sm-6 col-xs-12">
                                                         <label>Confirm Password <span class="text-danger">*</span></label>

@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers\v1\JobSeeker;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Mail\VerifyEmail;
-use Illuminate\View\View;
-use App\Models\UserVerify;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JobSeeker\JobSeekerRequest;
+use App\Mail\VerifyEmail;
+use App\Models\User;
+use App\Models\UserVerify;
+use App\Models\v1\careepick\JobSeeker\JobSeeker;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Models\v1\careepick\JobSeeker\JobSeeker;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -54,14 +56,17 @@ class AuthController extends Controller
     public function jsPostRegistration(Request $request)
     {
         // dd($request);
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:users',
-        //     'password' => 'required|min:6',
-        // ]);
+        $formRequest = new JobSeekerRequest();
+        $requestData = $request->except('_token', 'method_type');
+        // Validate the incoming request with the rules defined in rulesForCreate() method
+        $validator = Validator::make($requestData, $formRequest->rulesForCreate(), $formRequest->messages());
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $data = $request->all();
-        // dd($data);
 
         $createUser = $this->createUser($data, 1);
 
@@ -156,6 +161,13 @@ class AuthController extends Controller
 
                 $userType = auth()->user()->user_type;
 
+                // dd($userType);
+                if ($userType != 1) {
+                    Session::flush();
+                    Auth::logout();
+                    return Redirect()->back()->with('signinErrorMessage', 'Incorrect username or password');
+                }
+
                 // $intendedUrl = session()->pull('url.intended', '/job-seeker/dashboard');
                 // return redirect()->intended($intendedUrl)->withSuccess('Signed in');
 
@@ -169,10 +181,13 @@ class AuthController extends Controller
 
                 // return $this->createNewToken($token);
             }
+
+            return Redirect()->back()->with('signinErrorMessage', 'Incorrect username or password');
             return response()->json(['success' => false, 'message' => 'Login details are not valid'], 401);
         } catch (JWTException $e) {
             // Log::error($e);
             Log::error($e->getMessage());
+            return Redirect()->back()->with('signinErrorMessage', 'Incorrect username or password');
             return response()->json(['success' => false, 'message' => 'Could not create token'], 500);
         }
     }

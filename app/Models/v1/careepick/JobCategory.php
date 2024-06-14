@@ -10,6 +10,13 @@ class JobCategory extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'category_name',
+        'status',
+        'slug',
+        'remarks',
+    ];
+
     /**
      * Get the jobs associated with the category.
      */

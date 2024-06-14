@@ -36,7 +36,7 @@ class JobController extends Controller
             // dd($request);
             $data = $this->jobListData($request);
             // return redirect()->back()->with($data);
-            return view('v1.careepick.pages.common.job-list', $data);
+            return view('v1.careepick.pages.common.job-list', array_merge($data, ['oldInput' => $request->all()]));
         } catch (Exception $e) {
             Log::error($e);
         }

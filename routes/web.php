@@ -1,21 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\v1\careepick\JobController;
+use App\Http\Controllers\v1\Admin\AdminController;
+use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
+use App\Http\Controllers\v1\Ajax\ValidationDataController;
 use App\Http\Controllers\v1\careepick\ContactController;
 use App\Http\Controllers\v1\careepick\EmployeeController;
 use App\Http\Controllers\v1\careepick\EmployerController;
 use App\Http\Controllers\v1\careepick\HomePageController;
 use App\Http\Controllers\v1\careepick\JobApplyController;
-use App\Http\Controllers\v1\Ajax\ValidationDataController;
-use App\Http\Controllers\v1\JobProvider\JobPostController;
+use App\Http\Controllers\v1\careepick\JobController;
 use App\Http\Controllers\v1\employer\SocialLoginController;
-use App\Http\Controllers\v1\JobSeeker\ResumeBuilderController;
-use App\Http\Controllers\v1\JobSeeker\JobStatusNotificationController;
-use App\Http\Controllers\v1\JobSeeker\AuthController as JsAuthController;
 use App\Http\Controllers\v1\JobProvider\AuthController as JpAuthController;
-use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
-use App\Http\Controllers\v1\Admin\AdminController;
+use App\Http\Controllers\v1\JobProvider\JobPostController;
+use App\Http\Controllers\v1\JobSeeker\AuthController as JsAuthController;
+use App\Http\Controllers\v1\JobSeeker\JobStatusNotificationController;
+use App\Http\Controllers\v1\JobSeeker\ResumeBuilderController;
+use App\Http\Controllers\v1\NotificationController;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -96,8 +98,8 @@ Route::prefix('job-seeker')->group(function () {
                 Route::get('/all-applied-jobs', 'manageAllApplicantions')->name('all-applied-jobs');
             });
 
-            Route::get('/fetch-notifications', [JobStatusNotificationController::class, 'fetchNotifications'])->name('fetch.notifications');
-            Route::post('/mark-notification-read', [JobStatusNotificationController::class, 'markNotificationRead'])->name('mark.notification.read');
+            Route::get('/fetch-notifications', [JobStatusNotificationController::class, 'fetchNotifications'])->name('js.fetch.notifications');
+            Route::post('/mark-notification-read', [JobStatusNotificationController::class, 'markNotificationRead'])->name('js.mark.notification.read');
         // });
     });
 });
@@ -121,12 +123,15 @@ Route::prefix('job-provider')->group(function () {
                     Route::get('/', 'jpDashboard')->name('jp-dashboard');
                 });
             // });
+            Route::get('/profile', 'jpProfile')->name('jp-profile');
+            Route::post('/profile/update', 'jpProfileUpdate')->name('jp-profile.update');
         });
     });
 
     Route::middleware('jp_auth')->group(function () {
         // Route::middleware('is_jp_email_verified')->group(function () {
             Route::controller(JobPostController::class)->group(function () {
+                Route::post('/fetch-values', 'fetchRequiredData')->name('jp-fetch-values');
                 Route::get('/job-post', 'jobPostPage')->name('job-post-page');
                 Route::post('/job-post/add', 'addJobPost')->name('add-job-post');
                 Route::get('/manage-jobs', 'manageAllJobPostsPage')->name('manage-jobs');
@@ -177,6 +182,9 @@ Route::prefix('admin')->group(function () {
         // });
     });
 });
+
+Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications'])->name('fetch.notifications');
+            Route::post('/mark-notification-read', [NotificationController::class, 'markNotifications'])->name('mark.notification.read');
 
 Route::get('/register-company', [EmployerController::class, 'createCompany'])->name('register-company');
 

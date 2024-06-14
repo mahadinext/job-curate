@@ -174,7 +174,7 @@ class ResumeBuilderController extends Controller
         $jobSeekerLanguagesData = JobSeekerLanguages::with(['language'])->where('job_seeker_id', $jobSeekerId)->get();
         $jobSeekerResearchPapersData = JobSeekerResearchPapers::select("*")->where('job_seeker_id', $jobSeekerId)->get();
         $jobSeekerCertificationData = JobSeekerCertifications::select("*")->where('job_seeker_id', $jobSeekerId)->get();
-        $jobSeekerExperiencesData = JobSeekerExperiences::select("*")->where('job_seeker_id', $jobSeekerId)->get();
+        $jobSeekerExperiencesData = JobSeekerExperiences::select("*")->where('job_seeker_id', $jobSeekerId)->orderBy('id', 'desc')->get();
 
         $jobSeekerExperiencesData->transform(function ($item) {
             $startingTime = $item->start_month . ", " . $item->start_year;

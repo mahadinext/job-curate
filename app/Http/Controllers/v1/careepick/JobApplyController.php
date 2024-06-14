@@ -62,13 +62,20 @@ class JobApplyController extends Controller
      *
      * @return view
      */
-    public function manageAllApplicantions(): view
+    public function manageAllApplicantions(Request $request): View
     {
-        $applicationsData = AppliedJobs::getJobApplicationsForEmployee(app('jobSeeker')->id);
-        $data = [
-            'jobsData' => $applicationsData,
-        ];
+        $employeeId = app('jobSeeker')->id;
+        $statusFilter = ($request->input('status_id')) ? $request->input('status_id') : null;
+        $dateFilter = ($request->input('date_order', 'desc')) ? $request->input('date_order', 'desc') : 'desc';
 
-        return view('v1.careepick.dashboard.job-seeker.manage-applications', $data);
+        $applicationsData = AppliedJobs::getJobApplicationsForEmployee($employeeId, $statusFilter, $dateFilter);
+
+        $statuses = JobApplicationStatus::all();
+
+        return view('v1.careepick.dashboard.job-seeker.manage-applications', [
+            'jobsData' => $applicationsData,
+            'statuses' => $statuses,
+            'oldInput' => $request->all(),
+        ]);
     }
 }

@@ -103,7 +103,7 @@
             <div class="outer-box">
                 <!-- Login/Register -->
                 <div class="login-box">
-                    <a href="login-popup.html" class="call-modal"><span class="icon-user"></span></a>
+                    <a href="{{ route('jp-profile') }}"><span class="icon-user"></span></a>
                 </div>
 
                 <button id="toggle-user-sidebar"><img src="{{ URL::asset('dashboard/assets/images/resource/company-6.png') }}" alt="avatar"

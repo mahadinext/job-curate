@@ -283,6 +283,7 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             // Log::error($e);
             Log::error($e->getMessage());
+            return Redirect()->back()->with('signinErrorMessage', 'Incorrect username or password');
             // return response()->json(['success' => false, 'message' => 'Could not create token'], 500);
         }
     }
@@ -380,6 +381,66 @@ class AuthController extends Controller
         }
     }
 
+    public function updateUser(array $data)
+    {
+        try {
+            // Assuming you have the user instance you want to update
+            $user = User::find(Auth::user()->id);
+
+            // Check if fields are filled and if there are changes
+            $updates = [];
+            if (!empty($data['company_name']) && $data['company_name'] !== $user->name) {
+                $updates['name'] = $data['company_name'];
+            }
+            if (!empty($data['company_mail']) && $data['company_mail'] !== $user->email) {
+                $updates['email'] = $data['company_mail'];
+            }
+            if (!empty($data['company_phone_no_1']) && $data['company_phone_no_1'] !== $user->phone_no) {
+                $updates['phone_no'] = $data['company_phone_no_1'];
+            }
+            if (!empty($data['company_password'])) {
+                $hashedPassword = Hash::make($data['company_password']);
+                if ($hashedPassword !== $user->password) {
+                    $updates['password'] = $hashedPassword;
+                }
+            }
+
+            // Update only if there are changes
+            if (!empty($updates)) {
+                $user->update($updates);
+            }
+
+            $data['slug'] = $this->generateSlug($data['company_name']);
+
+            unset($data['_token']);
+            unset($data['method_type']);
+            $data['company_password'] = Hash::make($data['company_password']);
+
+            if (array_key_exists('company_logo', $data)) {
+                $file = $data['company_logo'];
+                $filePath = $this->getPathForUploadedFile($file);
+                $data['company_logo'] = $filePath;
+            }
+
+            if (array_key_exists('company_trade_license_document', $data)) {
+                $file = $data['company_trade_license_document'];
+                $filePath = $this->getPathForUploadedFile($file);
+                $data['company_trade_license_document'] = $filePath;
+            }
+
+            // Filter out empty fields
+            $data = array_filter($data, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+
+            $company = Company::where('id', app('jobProvider')->id)->update($data);
+
+            return $company;
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+    }
+
     /**
      * Get path for uploaded files
      *
@@ -458,5 +519,57 @@ class AuthController extends Controller
             return $slug;
         }
         return $slug;
+    }
+
+    public function jpProfile()
+    {
+        $employeeSizeData = EmployeeSize::select("*")->get();
+        $employmentTypeData = EmploymentType::all();
+        $yearsData = Year::select("*")->get();
+        $countryData = Country::select("*")->get();
+        $districtData = District::select("*")->get();
+        $upazilaData = Upazila::select("*")->get();
+        $profileData = Company::where('id', app('jobProvider')->id)->get();
+        $data = [
+            'employeeSizeData' => $employeeSizeData,
+            'employmentTypeData' => $employmentTypeData,
+            'yearsData' => $yearsData,
+            'countryData' => $countryData,
+            'districtData' => $districtData,
+            'upazilaData' => $upazilaData,
+            'profileData' => $profileData,
+        ];
+
+        return view('v1.careepick.dashboard.job-provider.profile', $data);
+        // dd($profileData);
+    }
+
+    public function jpProfileUpdate(Request $request)
+    {
+        try {
+            // dd($request);
+            $formRequest = new JobProviderRequest();
+            $requestData = $request->except('_token', 'method_type');
+            // Validate the incoming request with the rules defined in rulesForUpdate() method
+            $validator = Validator::make($requestData, $formRequest->rulesForUpdate(), $formRequest->messages());
+
+            // Check if validation fails
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $data = $request->all();
+            // dd($data);
+
+            $updateUser = $this->updateUser($data);
+
+            if ($updateUser) {
+                return Redirect()->back()->with('registrationMessage', 'Update successfull');
+            }
+
+            return Redirect()->back()->with('registrationMessage', 'Update Failure');
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
     }
 }

@@ -25,6 +25,33 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
+
+                        <!-- Filters -->
+                        <form method="GET" action="{{ route('all-applied-jobs') }}" id="filter_form">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <select name="status_id" class="form-select">
+                                        <option value="">Select Status</option>
+                                        @foreach($statuses as $status)
+                                            <option value="{{ $status->id }}" {{ old('status_id', $oldInput['status_id'] ?? '') == $status->id ? 'selected' : '' }}>
+                                                {{ $status->status }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="date_order" class="form-select">
+                                        <option value="">Select</option>
+                                        <option value="desc" {{ old('date_order', $oldInput['date_order'] ?? 'desc') == 'desc' ? 'selected' : '' }}>Most Recent</option>
+                                        <option value="asc" {{ old('date_order', $oldInput['date_order'] ?? '') == 'asc' ? 'selected' : '' }}>Less Recent</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="table-outer">
                             <table id="buttons-datatables" class="hover table align-middle default-table manage-job-table" style="width:100%">
                                 <thead>

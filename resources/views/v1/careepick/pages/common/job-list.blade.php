@@ -35,7 +35,7 @@
                         <div class="sidebar_header d-flex align-items-center justify-content-between px-4 py-3 br-bottom">
                             <h4 class="fs-bold fs-5 mb-0">Search Filter</h4>
                             <div class="ssh-header">
-                                <a href="javascript:void(0);" class="clear_all ft-medium text-muted" onclick="clearForm()">Clear All</a>
+                                <a href="{{ route('browse-job') }}" class="clear_all ft-medium text-muted">Clear All</a>
                                 <a href="#search_open" data-bs-toggle="collapse" aria-expanded="false" role="button"
                                     class="collapsed _filter-ico ml-2"><i class="fa-solid fa-filter"></i></a>
                             </div>
@@ -50,7 +50,7 @@
                                     @csrf
                                     <div class="filter-search-box px-4 pt-3">
                                         <div class="form-group">
-                                            <input type="text" name="job_title" class="form-control" placeholder="Search by job titles...">
+                                            <input type="text" name="job_title" class="form-control" placeholder="Search by job titles..." value="{{ old('job_title', $oldInput['job_title'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -59,28 +59,24 @@
                                         <div class="single_search_boxed px-4 pt-0 br-bottom">
                                             <div class="widget-boxed-header">
                                                 <h4>
-                                                    <a href="#categories" class="ft-medium fs-md" data-bs-toggle="collapse"
-                                                        aria-expanded="true" role="button">Job Categories</a>
+                                                    <a href="#categories" class="ft-medium fs-md" data-bs-toggle="collapse" aria-expanded="true" role="button">Job Categories</a>
                                                 </h4>
-
                                             </div>
-                                            <div class="widget-boxed-body collapse show" id="categories"
-                                                data-bs-parent="#categories">
+                                            <div class="widget-boxed-body collapse show" id="categories" data-bs-parent="#categories">
                                                 <div class="side-list no-border">
-                                                    <!-- Single Filter Card -->
                                                     <div class="single_filter_card">
                                                         <div class="card-body p-0">
                                                             <div class="inner_widget_link">
                                                                 <ul class="no-ul-list filter-list">
                                                                     <li>
-                                                                        <input id="a1" class="form-check-input" name="ADA" type="checkbox">
+                                                                        <input id="a1" class="form-check-input" name="ADA" type="checkbox" {{ old('ADA', $oldInput['ADA'] ?? false) ? 'checked' : '' }}>
                                                                         <label for="a1" class="form-check-label">
                                                                             All Category
                                                                         </label>
                                                                     </li>
                                                                     @foreach ($jobCategoryData as $key => $data)
                                                                         <li>
-                                                                            <input id="category-{{ $data->id }}"  name="job_category_id[]" value="{{ $data->id }}" class="form-check-input" type="checkbox" @if($data->isSelected) checked="" @endif>
+                                                                            <input id="category-{{ $data->id }}" name="job_category_id[]" value="{{ $data->id }}" class="form-check-input" type="checkbox" {{ in_array($data->id, old('job_category_id', $oldInput['job_category_id'] ?? [])) ? 'checked' : '' }}>
                                                                             <label for="category-{{ $data->id }}" class="form-check-label">
                                                                                 {{ $data->category_name }} ({{ $data->jobs_count }})
                                                                             </label>
@@ -94,54 +90,22 @@
                                             </div>
                                         </div>
 
-                                        <!-- Job Locations Search -->
-                                        {{-- <div class="single_search_boxed px-4 pt-0 br-bottom">
-                                            <div class="widget-boxed-header">
-                                                <h4>
-                                                    <a href="#locations" data-bs-toggle="collapse" aria-expanded="false"
-                                                        role="button" class="ft-medium fs-md collapsed">Job Locations</a>
-                                                </h4>
-                                            </div>
-                                            <div class="widget-boxed-body collapse" id="locations"
-                                                data-bs-parent="#locations">
-                                                <div class="side-list no-border">
-                                                    <div class="single_filter_card">
-                                                        <div class="card-body p-0">
-                                                            <div class="inner_widget_link">
-                                                                <ul class="no-ul-list filter-list">
-                                                                    <li>
-                                                                        <input id="b1" class="form-check-input"
-                                                                            name="ADA" type="checkbox" checked="">
-                                                                        <label for="b1"
-                                                                            class="form-check-label">Australia (21)</label>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-
                                         <!-- Job Skills Search -->
                                         <div class="single_search_boxed px-4 pt-0 br-bottom">
                                             <div class="widget-boxed-header">
                                                 <h4>
-                                                    <a href="#skills" data-bs-toggle="collapse" aria-expanded="false"
-                                                        role="button" class="ft-medium fs-md collapsed">Skills</a>
+                                                    <a href="#skills" data-bs-toggle="collapse" aria-expanded="false" role="button" class="ft-medium fs-md collapsed">Skills</a>
                                                 </h4>
-
                                             </div>
                                             <div class="widget-boxed-body collapse" id="skills" data-bs-parent="#skills">
                                                 <div class="side-list no-border">
-                                                    <!-- Single Filter Card -->
                                                     <div class="single_filter_card">
                                                         <div class="card-body p-0">
                                                             <div class="inner_widget_link">
                                                                 <ul class="no-ul-list filter-list">
                                                                     @foreach ($jobsBySkill as $key => $data)
                                                                         <li>
-                                                                            <input id="c1-{{ $key }}" name="skill_id[]" value="{{ $data->skill_id }}" class="form-check-input jobSkill" type="checkbox">
+                                                                            <input id="c1-{{ $key }}" name="skill_id[]" value="{{ $data->skill_id }}" class="form-check-input jobSkill" type="checkbox" {{ in_array($data->skill_id, old('skill_id', $oldInput['skill_id'] ?? [])) ? 'checked' : '' }}>
                                                                             <label for="c1-{{ $key }}" class="form-check-label">{{ $data->skill_name }} ({{ $data->total_jobs }})</label>
                                                                         </li>
                                                                     @endforeach
@@ -157,21 +121,18 @@
                                         <div class="single_search_boxed px-4 pt-0 br-bottom">
                                             <div class="widget-boxed-header">
                                                 <h4>
-                                                    <a href="#experience" data-bs-toggle="collapse" aria-expanded="false"
-                                                        role="button" class="ft-medium fs-md collapsed">Experience</a>
+                                                    <a href="#experience" data-bs-toggle="collapse" aria-expanded="false" role="button" class="ft-medium fs-md collapsed">Experience</a>
                                                 </h4>
                                             </div>
-                                            <div class="widget-boxed-body collapse" id="experience"
-                                                data-bs-parent="#experience">
+                                            <div class="widget-boxed-body collapse" id="experience" data-bs-parent="#experience">
                                                 <div class="side-list no-border">
-                                                    <!-- Single Filter Card -->
                                                     <div class="single_filter_card">
                                                         <div class="card-body p-0">
                                                             <div class="inner_widget_link">
                                                                 <ul class="no-ul-list filter-list">
                                                                     @foreach ($jobsByExperience as $key => $data)
                                                                         <li>
-                                                                            <input id="d1-{{ $key }}" name="experience_id[]" value="{{ $data->experience_id }}" class="form-check-input jobExp" type="checkbox">
+                                                                            <input id="d1-{{ $key }}" name="experience_id[]" value="{{ $data->experience_id }}" class="form-check-input jobExp" type="checkbox" {{ in_array($data->experience_id, old('experience_id', $oldInput['experience_id'] ?? [])) ? 'checked' : '' }}>
                                                                             <label for="d1-{{ $key }}" class="form-check-label">{{ $data->experience_name }} ({{ $data->total_jobs }})</label>
                                                                         </li>
                                                                     @endforeach
@@ -187,8 +148,7 @@
                                         <div class="single_search_boxed px-4 pt-0 br-bottom">
                                             <div class="widget-boxed-header">
                                                 <h4>
-                                                    <a href="#jbnatures" data-bs-toggle="collapse" aria-expanded="false"
-                                                        role="button" class="ft-medium fs-md collapsed">Job Type</a>
+                                                    <a href="#jbnatures" data-bs-toggle="collapse" aria-expanded="false" role="button" class="ft-medium fs-md collapsed">Job Type</a>
                                                 </h4>
                                             </div>
                                             <div class="widget-boxed-body collapse" id="jbnatures" data-bs-parent="#jbnatures">
@@ -199,7 +159,7 @@
                                                                 <ul class="no-ul-list filter-list">
                                                                     @foreach ($jobsByJobNature as $key => $data)
                                                                         <li>
-                                                                            <input id="e2-{{ $key }}" name="job_nature_id[]" value="{{ $data->job_type_id }}" class="form-check-input jobNature" type="checkbox">
+                                                                            <input id="e2-{{ $key }}" name="job_nature_id[]" value="{{ $data->job_type_id }}" class="form-check-input jobNature" type="checkbox" {{ in_array($data->job_type_id, old('job_nature_id', $oldInput['job_nature_id'] ?? [])) ? 'checked' : '' }}>
                                                                             <label for="e2-{{ $key }}" class="form-check-label">{{ $data->job_nature }} ({{ $data->total_jobs }})</label>
                                                                         </li>
                                                                     @endforeach
@@ -209,27 +169,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
 
                                         <!-- Job place Search -->
                                         <div class="single_search_boxed px-4 pt-0 br-bottom">
                                             <div class="widget-boxed-header">
                                                 <h4>
-                                                    <a href="#jobPlace" data-bs-toggle="collapse" aria-expanded="false"
-                                                        role="button" class="ft-medium fs-md collapsed">Job Place</a>
+                                                    <a href="#jobPlace" data-bs-toggle="collapse" aria-expanded="false" role="button" class="ft-medium fs-md collapsed">Job Place</a>
                                                 </h4>
                                             </div>
                                             <div class="widget-boxed-body collapse" id="jobPlace" data-bs-parent="#jobPlace">
                                                 <div class="side-list no-border">
-                                                    <!-- Single Filter Card -->
                                                     <div class="single_filter_card">
                                                         <div class="card-body p-0">
                                                             <div class="inner_widget_link">
                                                                 <ul class="no-ul-list filter-list">
                                                                     @foreach ($jobsByJobPlace as $key => $data)
                                                                         <li>
-                                                                            <input id="f2-{{ $key }}" name="job_place_id[]" value="{{ $data->job_place_id }}" class="form-check-input jobPlace" type="checkbox">
+                                                                            <input id="f2-{{ $key }}" name="job_place_id[]" value="{{ $data->job_place_id }}" class="form-check-input jobPlace" type="checkbox" {{ in_array($data->job_place_id, old('job_place_id', $oldInput['job_place_id'] ?? [])) ? 'checked' : '' }}>
                                                                             <label for="f2-{{ $key }}" class="form-check-label">{{ $data->job_place }} ({{ $data->total_jobs }})</label>
                                                                         </li>
                                                                     @endforeach
@@ -246,6 +203,8 @@
                                         <button type="submit" class="btn btn-primary full-width">Search job</button>
                                     </div>
                                 </form>
+
+
                             </div>
                         </div>
                     </div>

@@ -83,26 +83,92 @@ class JobPostController extends Controller
 
             // Check if validation fails
             if ($validator->fails()) {
-                // dd($validator);
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
-            // dd($request);
 
             $data = $request->all();
             $data['company_id'] = app('jobProvider')->id;
             $data['slug'] = $this->generateSlug($data['job_title']);
-            $skillSets = $data['skill_id'];
+
+            $skillSets = $this->createSkillsArray($data['job_skill_ids']);
+            // dd($skillSets);
 
             unset($data['_token']);
-            unset($data['skill_id']);
+            unset($data['job_skill_ids']);
             // dd($data);
+
+            if ($data['job_category_id'] != null) {
+                $data['job_category_id'] = $this->createNewJobCategory($data['job_category_id']);
+            }
+
+            if ($data['salary_type_id'] == 3) {
+                $data['salary'] = $data['salary_from'] . " - " . $data['salary_to'];
+            }
 
             $this->insertJobPost($data, $skillSets);
 
             return redirect()->back()->with('add-job-post-message', "Job post added successfully");
         } catch (Exception $e) {
             Log::error($e);
+        }
+    }
+
+    /**
+     * Create skillsets array
+     *
+     * @return array
+     */
+    private function createSkillsArray($skillSets)
+    {
+        $skillArray = explode(',', $skillSets);
+
+        $newSkills = [];
+        $existingSkills = [];
+
+        // Separate the new skills and existing skill IDs
+        foreach ($skillArray as $skill) {
+            if (strpos($skill, 'new-') === 0) {
+                $newSkills[] = substr($skill, 4); // Remove 'new-' prefix
+            } else {
+                $existingSkills[] = (int) $skill; // Convert to integer
+            }
+        }
+
+        // Insert new skills into Skill model and get their IDs
+        $newSkillIds = [];
+        foreach ($newSkills as $newSkill) {
+            $skillExists = Skills::where('skill_name', $newSkill)->first();
+            if (!$skillExists) {
+                $skill = Skills::create(['skill_name' => $newSkill]);
+                $newSkillIds[] = $skill->id;
+            } else {
+                $newSkillIds[] = $skillExists->id;
+            }
+        }
+
+        // Merge new skill IDs with existing skill IDs
+        $allSkillIds = array_merge($existingSkills, $newSkillIds);
+
+        // Now $allSkillIds contains all the skill IDs
+        return $allSkillIds;
+    }
+
+    private function createNewJobCategory($categoryName)
+    {
+        try {
+            $jobCategory = JobCategory::where('category_name', $categoryName)->first();
+            if ($jobCategory) {
+                return $jobCategory->id;
+            }
+
+            $jobCategory = JobCategory::insert([
+                'category_name' => $categoryName,
+                'status' => 1,
+            ]);
+
+            return $jobCategory->id();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
     }
 
@@ -428,6 +494,56 @@ class JobPostController extends Controller
         }
 
         return $changesToSave;
+    }
+
+    public function fetchRequiredData(Request $request)
+    {
+        try {
+            switch ($request->requestedData) {
+                case ('job-category'):
+                    $data = JobCategory::get();
+                    $formattedResponse = $this->formatResponse($data);
+                    break;
+                case ('job-skill'):
+                    $data = Skills::getAllData();
+                    $formattedResponse = $this->formatResponse($data);
+                    break;
+                default:
+                    $formattedResponse = [
+                        'status' => 400,
+                        'responseData' => null,
+                        'message' => 'Something went wrong.',
+                    ];
+            }
+
+            return response()->json($formattedResponse);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $response = [
+                'status' => 400,
+                'responseData' => null,
+                'message' => $e->getMessage(),
+            ];
+            return response()->json($response);
+        }
+    }
+
+    private function formatResponse($data)
+    {
+        if ($data) {
+            $response = [
+                'status' => 200,
+                'responseData' => $data,
+            ];
+        } else {
+            $response = [
+                'status' => 400,
+                'responseData' => null,
+                'message' => 'No Data found',
+            ];
+        }
+
+        return $response;
     }
 
     /**
