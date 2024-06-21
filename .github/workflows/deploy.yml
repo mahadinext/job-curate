@@ -4,81 +4,22 @@ on:
     branches:
       - development
 jobs:
-  FTP-Deploy-Action:
-    name: 🎉 Deploy
+  tests:
     runs-on: ubuntu-latest
-
+    name: Build & Deploy Assets
     steps:
-      - name: Set up environment
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
         run: |
-          echo "DATE_TIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-          echo "REPO_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 600 ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa.pub
+          ssh-keyscan -H ${{ secrets.FTP_SERVER }} >> ~/.ssh/known_hosts
 
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - uses: actions/setup-node@master
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install Dependencies
-        run: composer install --ignore-platform-reqs
-      - name: Generate key
-        run: php artisan key:generate
-      - name: Generate storage link
-        run: php artisan storage:link
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-
-      - name: 📂 Sync folders and files to the server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /dev.jobcurate.com/
-
-      # - name: Send email notification on success
-      #   if: success()
-      #   uses: dawidd6/action-send-mail@v2
-      #   with:
-      #     server_address: mail.gluehost.in
-      #     server_port: 465
-      #     username: ${{ secrets.SMTP_USERNAME }}
-      #     password: ${{ secrets.SMTP_PASSWORD }}
-      #     subject: 'Success: ${{ env.REPO_NAME }} cPanel Deployment Lift-off! 🚀'
-      #     body: |
-      #       Hey there, 🎉
-
-      #       Project: ${{ env.REPO_NAME }}
-      #       Committer: ${{ github.actor }}
-
-      #       Great news! Your latest code changes have successfully landed on the cPanel runway at ${{ env.DATE_TIME }}. The deployment was as smooth as butter. Give yourself a pat on the back and celebrate this milestone! 🥳
-
-      #       If you have any questions or want to share your victory dance, hit reply. Happy coding! 💻
-
-      #     to: ${{ secrets.REPO_OWNER_EMAILS }}
-      #     from: Github Actions 🚀
-
-      # - name: Send email notification on failure
-      #   if: failure()
-      #   uses: dawidd6/action-send-mail@v2
-      #   with:
-      #     server_address: mail.gluehost.in
-      #     server_port: 465
-      #     username: ${{ secrets.SMTP_USERNAME }}
-      #     password: ${{ secrets.SMTP_PASSWORD }}
-      #     subject: '🛑 Oh No! Deployment Alert!'
-      #     body: |
-      #       Uh-oh! 🚨
-
-      #       Project: ${{ env.REPO_NAME }}
-      #       Committer: ${{ github.actor }}
-
-      #       Unfortunately, the deployment to cPanel hit a snag at ${{ env.DATE_TIME }}. Don't panic, though! Take a deep breath and dive into the logs to unravel this mystery. You've got this! 💪
-
-      #       If you need a hand or just want to vent, feel free to reach out. We're all in this together! 🤝
-
-      #     to: ${{ secrets.REPO_OWNER_EMAILS }}
-      #     from: Github Actions 🚀
+      - name: Deploy
+        run: |
+          ssh syncflux@${{ secrets.FTP_SERVER }} 'bash -s' < ${{ github.workspace }}/.github/workflows/deploy.sh
