@@ -9,45 +9,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Deploy to cPanel
-      #   id: deploy
-      #   uses: pinkasey/cpanel-deploy-action@v1.0.0
+      - name: Deploy to cPanel
+        id: deploy
+        uses: pinkasey/cpanel-deploy-action@v1.0.0
+        with:
+          hostname: ${{ secrets.HOST }}
+          repository_root: '/home/jobcurat/dev.jobcurate.com/'
+          branch: main
+          cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
+      - name: echo deploy-duration
+        run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
+
+      # - name: Set up environment
+      #   run: |
+      #     echo "DATE_TIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+      #     echo "REPO_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+
+      # - name: 🚚 Get latest code
+      #   uses: actions/checkout@v3
       #   with:
-      #     hostname: 'https://hostname.example.com'
-      #     repository_root: '/home/my_account/repositories/my_repository'
-      #     branch: main
-      #     cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
-      # - name: echo deploy-duration
-      #   run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
+      #     fetch-depth: 2
+      # - uses: actions/setup-node@master
+      # - name: Copy .env
+      #   run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      # - name: Install Dependencies
+      #   run: composer install --ignore-platform-reqs
+      # - name: Generate key
+      #   run: php artisan key:generate
+      # - name: Generate storage link
+      #   run: php artisan storage:link
+      # - name: Directory Permissions
+      #   run: chmod -R 777 storage bootstrap/cache
 
-      - name: Set up environment
-        run: |
-          echo "DATE_TIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-          echo "REPO_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
-
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - uses: actions/setup-node@master
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install Dependencies
-        run: composer install --ignore-platform-reqs
-      - name: Generate key
-        run: php artisan key:generate
-      - name: Generate storage link
-        run: php artisan storage:link
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-
-      - name: 📂 Sync folders and files to the server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ./dev.jobcurate.com/
+      # - name: 📂 Sync folders and files to the server
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.4
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USERNAME }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     server-dir: ./dev.jobcurate.com/
 
       # - name: Send email notification on success
       #   if: success()
