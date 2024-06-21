@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /home/jobcurat/dev.jobcurate.com/
+          server-dir: /dev.jobcurate.com/
 
       # - name: Send email notification on success
       #   if: success()
