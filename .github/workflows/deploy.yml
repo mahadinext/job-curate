@@ -16,6 +16,7 @@ jobs:
           hostname: ${{ secrets.HOST }}
           repository_root: '/home/jobcurat/dev.jobcurate.com/'
           branch: main
+          cpanel_username: 'cPanel'
           cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
       - name: echo deploy-duration
         run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
