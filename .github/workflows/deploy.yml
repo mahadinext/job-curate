@@ -9,13 +9,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Deploy to cPanel
         id: deploy
         uses: pinkasey/cpanel-deploy-action@v1.0.0
         with:
-          hostname: ${{ secrets.HOST }}
+          hostname: 'dev.jobcurate.com'
           repository_root: '/home/jobcurat/dev.jobcurate.com/'
-          branch: main
+          branch: development
           cpanel_username: 'cPanel'
           cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
       - name: echo deploy-duration
