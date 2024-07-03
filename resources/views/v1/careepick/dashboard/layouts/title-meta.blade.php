@@ -1,8 +1,10 @@
-<meta charset="utf-8" />
+<meta charset="UTF-8">
 <title>Careepick - Responsive Job Portal Bootstrap Template</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="robots" content="index, follow">
 <meta content="careepick" name="description" />
 <meta content="Mahadi" name="author" />
+<meta name="keywords" content="keyword1, keyword2, keyword3">
 <!-- Responsive -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 {{-- <meta name="csrf_token" content="{{ csrf_token() }}" /> --}}

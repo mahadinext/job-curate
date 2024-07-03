@@ -2,34 +2,35 @@
 
 namespace App\Http\Controllers\v1\JobProvider;
 
-use Exception;
-use Pusher\Pusher;
-use App\Models\Jobs;
-use App\Models\AgeRange;
-use App\Models\JobPlace;
-use App\Models\JobNature;
-use Illuminate\View\View;
-use App\Models\SalaryType;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Events\NewNotification;
-use App\Models\ExperienceRange;
-use App\Models\v1\careepick\Day;
-use App\Models\JobRequiredSkills;
-use Illuminate\Support\Facades\DB;
-use App\Models\v1\careepick\Skills;
-use Illuminate\Support\Facades\Log;
 use App\Events\NewNotificationEvent;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
-use App\Models\v1\careepick\JobCategory;
-use Illuminate\Support\Facades\Validator;
-use App\Models\JobApplicationStatusTracker;
-use App\Mail\JobApplicationStatusUpdateMail;
-use App\Models\v1\careepick\JobSeeker\JobSeeker;
 use App\Http\Requests\JobProvider\JobPostRequest;
+use App\Jobs\NotifyJobStatusChanged;
+use App\Mail\JobApplicationStatusUpdateMail;
+use App\Models\AgeRange;
+use App\Models\ExperienceRange;
+use App\Models\JobApplicationStatusTracker;
+use App\Models\JobNature;
+use App\Models\JobPlace;
+use App\Models\JobRequiredSkills;
+use App\Models\Jobs;
+use App\Models\SalaryType;
+use App\Models\v1\careepick\Day;
 use App\Models\v1\careepick\JobApplicationStatus;
+use App\Models\v1\careepick\JobCategory;
 use App\Models\v1\careepick\JobSeeker\AppliedJobs;
+use App\Models\v1\careepick\JobSeeker\JobSeeker;
+use App\Models\v1\careepick\Skills;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Pusher\Pusher;
 
 class JobPostController extends Controller
 {
@@ -454,7 +455,13 @@ class JobPostController extends Controller
                         'required_documents' => $this->request->required_documents,
                     ]);
                 }
-                $this->sendMail($appliedJobs, $this->request);
+
+                // Dispatch the notification job
+                // NotifyJobStatusChanged::dispatch($appliedJobs);
+
+                if (env('APP_ENV') != "local") {
+                    $this->sendMail($appliedJobs, $this->request);
+                }
             });
 
             return redirect()->back()->with('applicationStatusUpdateMsg', "Status updated successfully");
@@ -471,15 +478,19 @@ class JobPostController extends Controller
 
     private function sendMail($appliedJobs, $request)
     {
-        $jobSeekerData = JobSeeker::where('id', $appliedJobs->js_id)->first();
-        $jobData = Jobs::getJobDetail(null, $appliedJobs->job_id);
-        $statusTrackerData = JobApplicationStatusTracker::getInfo($appliedJobs->job_id, $appliedJobs->js_id, $request->status_id);
-        $mailData = [
-            'jobSeekerData' => $jobSeekerData,
-            'jobData' => $jobData,
-            'statusTrackerData' => $statusTrackerData,
-        ];
-        Mail::to($jobSeekerData->jobseeker_mail)->send(new JobApplicationStatusUpdateMail($mailData));
+        try {
+            $jobSeekerData = JobSeeker::where('id', $appliedJobs->js_id)->first();
+            $jobData = Jobs::getJobDetail(null, $appliedJobs->job_id);
+            $statusTrackerData = JobApplicationStatusTracker::getInfo($appliedJobs->job_id, $appliedJobs->js_id, $request->status_id);
+            $mailData = [
+                'jobSeekerData' => $jobSeekerData,
+                'jobData' => $jobData,
+                'statusTrackerData' => $statusTrackerData,
+            ];
+            Mail::to($jobSeekerData->jobseeker_mail)->send(new JobApplicationStatusUpdateMail($mailData));
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     private function checkForDirtyData($model)

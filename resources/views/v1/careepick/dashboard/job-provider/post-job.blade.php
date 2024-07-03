@@ -414,7 +414,8 @@
                     };
 
                     ajaxRequest(url, requestType, params, function(response) {
-                        jobCategoryData = response.responseData; // Adjusted response structure
+                        // jobCategoryData = response.responseData; // Adjusted response structure
+                        jobCategoryData = response; // Adjusted response structure
                     });
                 }
 
@@ -430,7 +431,7 @@
                     });
                 }
 
-                // Event listener for major subject input field
+                // Event listener for job category input field
                 document.getElementById('job-category-input').addEventListener('input', function() {
                     var dropdownId = "job-category-dropdown";
                     var columnName = "category_name";

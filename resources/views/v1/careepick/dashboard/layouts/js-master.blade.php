@@ -10,26 +10,26 @@
     @include('v1.careepick.dashboard.layouts.body')
 @show
 
-<div class="page-wrapper dashboard">
+    <div class="page-wrapper dashboard">
 
-    <!-- Preloader -->
-    <div class="preloader"></div>
+        <!-- Preloader -->
+        <div class="preloader"></div>
 
-    @include('v1.careepick.dashboard.layouts.js-topbar')
+        @include('v1.careepick.dashboard.layouts.js-topbar')
 
-    <div id="toastr-alerts-container"></div>
+        <div id="toastr-alerts-container"></div>
 
-    <section class="user-dashboard">
-        <div class="dashboard-outer">
+        <section class="user-dashboard">
+            <div class="dashboard-outer">
 
-            @yield('content')
+                @yield('content')
 
-            @include('v1.careepick.dashboard.layouts.footer')
-        </div>
-    </section>
+                @include('v1.careepick.dashboard.layouts.footer')
+            </div>
+        </section>
 
-    <!-- JAVASCRIPT -->
-    @include('v1.careepick.dashboard.layouts.vendor-scripts')
-    </body>
+        <!-- JAVASCRIPT -->
+        @include('v1.careepick.dashboard.layouts.vendor-scripts')
+</body>
 
 </html>

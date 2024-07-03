@@ -131,6 +131,35 @@
             <li class="active"><a href="{{ route('ad-dashboard') }}"> <i class="la la-home"></i> Dashboard</a></li>
             <li><a href="{{ route('all-recruiters-page') }}"><i class="la la-paper-plane"></i>Recruiters</a></li>
             <li><a href="{{ route('all-employees-page') }}"><i class="la la-briefcase"></i>Employees </a></li>
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#settings-dropdown" aria-expanded="false" aria-controls="settings-dropdown">
+                    <i class="la la-cog"></i> Web Settings
+                </a>
+                <ul id="settings-dropdown" class="navigation collapse">
+                    <li><a href="{{ route('web-logo-page') }}"><i class="la la-paper-plane"></i>Web Logo</a></li>
+                    <li><a href="{{ route('web-info-page') }}"><i class="la la-paper-plane"></i>Web Info</a></li>
+                    <li><a href="{{ route('meta.index') }}"><i class="la la-paper-plane"></i>Meta Info</a></li>
+                    <li><a href="{{ route('ad-signout') }}"><i class="la la-user"></i> Profile Settings</a></li>
+                    <li><a href="{{ route('ad-signout') }}"><i class="la la-key"></i> Account Settings</a></li>
+                    <li><a href="{{ route('ad-signout') }}"><i class="la la-lock"></i> Privacy Settings</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#home-page-dropdown" aria-expanded="false" aria-controls="home-page-dropdown">
+                    <i class="la la-home"></i> Home Page
+                </a>
+                <ul id="home-page-dropdown" class="navigation collapse">
+                    <li><a href="{{ route('ad-signout') }}"><i class="la la-paper-plane"></i>Hero Section</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-toggle="collapse" data-target="#about-page-dropdown" aria-expanded="false" aria-controls="about-page-dropdown">
+                    <i class="la la-home"></i> About Page
+                </a>
+                <ul id="about-page-dropdown" class="navigation collapse">
+                    <li><a href=""><i class="la la-paper-plane"></i>Meta Section</a></li>
+                </ul>
+            </li>
             <li><a href="{{ route('ad-signout') }}"><i class="la la-sign-out"></i>Logout</a></li>
         </ul>
     </div>

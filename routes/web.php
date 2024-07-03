@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\v1\Admin\AdminController;
 use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
+use App\Http\Controllers\v1\Admin\PageMetaController;
+use App\Http\Controllers\v1\Admin\Pages\HomeSettingsController;
+use App\Http\Controllers\v1\Admin\WebSettingsController;
 use App\Http\Controllers\v1\Ajax\ValidationDataController;
 use App\Http\Controllers\v1\careepick\ContactController;
 use App\Http\Controllers\v1\careepick\EmployeeController;
@@ -179,6 +182,29 @@ Route::prefix('admin')->group(function () {
                 Route::get('/all-recruiters', 'recruitersPage')->name('all-recruiters-page');
                 Route::get('/all-employees', 'employeesPage')->name('all-employees-page');
             });
+
+            Route::controller(WebSettingsController::class)->group(function () {
+                Route::prefix('/web-settings')->group(function () {
+                    Route::get('/logo', 'webLogoPage')->name('web-logo-page');
+                    Route::get('/info', 'webInfoPage')->name('web-info-page');
+                    Route::post('/logo/update', 'webLogoUpdate')->name('web-logo-update');
+                    Route::post('/info/update', 'webInfoUpdate')->name('web-info-update');
+                });
+
+            });
+
+            Route::controller(PageMetaController::class)->group(function () {
+                Route::prefix('/web-settings')->group(function () {
+                    Route::get('/meta', 'index')->name('meta.index');
+                    Route::post('/meta/load-meta-info', 'loadMetaInfo')->name('meta.loadMetaInfo');
+                    Route::put('/meta/{pageName}', 'update')->name('meta.update');
+                });
+            });
+
+            Route::controller(HomeSettingsController::class)->group(function () {
+                Route::get('/all-recruiters', 'recruitersPage')->name('all-recruiters-page');
+                Route::get('/all-employees', 'employeesPage')->name('all-employees-page');
+            });
         // });
     });
 });
@@ -195,6 +221,9 @@ Route::get('/register-company', [EmployerController::class, 'createCompany'])->n
 
 Route::controller(HomePageController::class)->group(function () {
     Route::get('/', 'index')->name('home');
+    // Route::get('/', 'index')->name('about');
+    // Route::get('/', 'index')->name('career');
+    // Route::get('/', 'index')->name('contact-us');
 });
 
 Route::controller(EmployerController::class)->group(function () {
@@ -249,3 +278,11 @@ Route::controller(JobController::class)->group(function () {
 Route::get('404', function () {
     return view('careepick.pages.404');
 })->name('404');
+
+Route::get('pusher', function () {
+    return view('pusher');
+});
+Route::get('test', function () {
+    event(new App\Events\MessageSent('websolutionstuff_team'));
+    return "Event has been sent!";
+});

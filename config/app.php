@@ -193,7 +193,8 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Pusher' => Pusher\Pusher::class,
+        // 'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];

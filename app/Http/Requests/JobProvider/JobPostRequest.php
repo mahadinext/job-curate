@@ -9,7 +9,7 @@ class JobPostRequest extends FormRequest
     public function rulesForCreate()
     {
         return [
-            'job_category_id' => 'required|integer',
+            'job_category_id' => 'required',
             'job_title' => 'required|string|max:80',
             'vacancy' => 'required|integer',
             'salary_type_id' => 'required|integer',

@@ -101,22 +101,23 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
     // Function to load notifications
-    function loadNotifications() {
-        // console.log('Loading notifications');
-        $.ajax({
-            url: "{{ route('fetch.notifications') }}",
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                // Update UI with notifications
-                updateNotificationUI(response.notifications);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error fetching notifications: " + error);
-            }
-        });
-    }
+    // function loadNotifications() {
+    //     // console.log('Loading notifications');
+    //     $.ajax({
+    //         url: "{{ route('fetch.notifications') }}",
+    //         type: "GET",
+    //         dataType: "json",
+    //         success: function(response) {
+    //             // Update UI with notifications
+    //             updateNotificationUI(response.notifications);
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error("Error fetching notifications: " + error);
+    //         }
+    //     });
+    // }
 
     // Function to update notification UI
     function updateNotificationUI(notifications) {
