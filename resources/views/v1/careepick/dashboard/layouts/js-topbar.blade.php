@@ -9,7 +9,7 @@
             <!--Nav Outer -->
             <div class="nav-outer">
                 <div class="logo-box">
-                    <div class="logo"><a href="{{ route('home') }}"><img src="{{ URL::asset('dashboard/assets/images/logo.svg') }}" alt="" title=""></a>
+                    <div class="logo"><a href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" alt="" title=""></a>
                     </div>
                 </div>
 

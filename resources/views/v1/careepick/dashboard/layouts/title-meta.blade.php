@@ -11,5 +11,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Favicon Icon -->
-<link rel="shortcut icon" href="{{ URL::asset('dashboard/assets/images/favicon.png')}}" type="image/x-icon">
-<link rel="icon" href="{{ URL::asset('dashboard/assets/images/favicon.png')}}" type="image/x-icon">
+{{-- <link rel="shortcut icon" href="{{ URL::asset('dashboard/assets/images/favicon.png')}}" type="image/x-icon">
+<link rel="icon" href="{{ URL::asset('dashboard/assets/images/favicon.png')}}" type="image/x-icon"> --}}
+<link rel="shortcut icon" href="{{ URL::asset('assets/img/web/favicon.png')}}" type="image/x-icon">
+<link rel="icon" href="{{ URL::asset('assets/img/web/favicon.png')}}" type="image/x-icon">
