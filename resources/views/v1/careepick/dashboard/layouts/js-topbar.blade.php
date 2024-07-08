@@ -12,6 +12,7 @@
                     <div class="logo"><a href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" alt="" title=""></a>
                     </div>
                 </div>
+                
 
                 <nav class="nav main-menu">
                     <ul class="navigation" id="navbar">
