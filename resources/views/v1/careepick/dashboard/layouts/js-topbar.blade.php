@@ -12,7 +12,7 @@
                     <div class="logo"><a href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" alt="" title=""></a>
                     </div>
                 </div>
-                
+
 
                 <nav class="nav main-menu">
                     <ul class="navigation" id="navbar">
@@ -125,7 +125,7 @@
 
     <!-- Mobile Header -->
     <div class="mobile-header">
-        <div class="logo"><a href="{{ route('js-dashboard') }}"><img src="{{ URL::asset('dashboard/assets/images/logo.svg') }}" alt="" title=""></a>
+        <div class="logo"><a href="{{ route('js-dashboard') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" alt="" title=""></a>
         </div>
 
         <!--Nav Box-->

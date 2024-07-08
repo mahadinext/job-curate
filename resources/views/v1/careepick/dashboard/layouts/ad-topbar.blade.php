@@ -94,7 +94,7 @@
 
     <!-- Mobile Header -->
     <div class="mobile-header">
-        <div class="logo"><a href="{{ route('ad-dashboard') }}"><img src="{{ URL::asset('dashboard/assets/images/logo.svg') }}" alt="" title=""></a>
+        <div class="logo"><a href="{{ route('ad-dashboard') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" alt="" title=""></a>
         </div>
 
         <!--Nav Box-->
