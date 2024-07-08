@@ -67,7 +67,6 @@
       if (notificationsCount <= 0) {
         notificationsWrapper.hide();
       }
-      console.log('data');
 
       var pusher = new Pusher('df94f0471e2d8415f853', {
         encrypted: true,
@@ -76,7 +75,6 @@
 
       // Subscribe to the channel we specified in our Laravel Event
       var channel = pusher.subscribe('status-liked');
-      console.log('data');
 
       // Bind a function to a Event (the full Laravel class)
       channel.bind('App\\Events\\MessageSent', function(data) {

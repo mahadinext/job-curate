@@ -6,9 +6,9 @@
     <div class="container">
         <nav id="navigation" class="navigation navigation-landscape">
             <div class="nav-header">
-                <a class="nav-brand static-logo" href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/logo.png') }}" class="logo"
+                <a class="nav-brand static-logo" href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" class="logo"
                         alt=""></a>
-                <a class="nav-brand fixed-logo" href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/logo.png') }}" class="logo"
+                <a class="nav-brand fixed-logo" href="{{ route('home') }}"><img src="{{ URL::asset('assets/img/web/logo.png') }}" class="logo"
                         alt=""></a>
                 <div class="nav-toggle"></div>
                 <div class="mobile_nav">
