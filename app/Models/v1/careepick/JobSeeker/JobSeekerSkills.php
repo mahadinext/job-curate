@@ -46,4 +46,9 @@ class JobSeekerSkills extends Model
     {
         return $this->belongsTo(Skills::class, 'skill_id');
     }
+
+    public function jobSeeker()
+    {
+        return $this->belongsTo(JobSeeker::class, 'job_seeker_id');
+    }
 }

@@ -48,15 +48,16 @@
                                     <select name="from_year" id="from_year" class="form-control chosen-select">
                                         <option value="">Select Year</option>
                                         @foreach ($yearsData as $key => $year)
-                                            <option value="{{ $year->year }}">
-                                                {{ $year->year }}</option>
+                                            @if ($year->year <= \Carbon\Carbon::now()->year)
+                                                <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div id="" class="form-group col-lg-3 col-md-3 mb-4">
+                                <div id="toMonthDiv" class="form-group col-lg-3 col-md-3 mb-4">
                                     <label class="py-2">To Month <span class="text-danger">*</span></label>
-                                    <select id="to-month" name="to_month" class="form-control chosen-select" disabled="false">
+                                    <select id="to-month" name="to_month" class="form-control chosen-select">
                                         <option value="">Select Month</option>
                                         @foreach ($monthsData as $key => $month)
                                             <option value="{{ $month->month_name }}">
@@ -65,20 +66,21 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-lg-3 col-md-3 mb-4">
+                                <div id="toYearDiv" class="form-group col-lg-3 col-md-3 mb-4">
                                     <label class="py-2">To Year <span class="text-danger">*</span></label>
-                                    <select id="to-year" name="to_year" class="form-control chosen-select" disabled="false">
+                                    <select id="to-year" name="to_year" class="form-control chosen-select">
                                         <option value="">Select Year</option>
                                         @foreach ($yearsData as $key => $year)
-                                            <option value="{{ $year->year }}">
-                                                {{ $year->year }}</option>
+                                            @if ($year->year <= \Carbon\Carbon::now()->year)
+                                                <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-3 mb-4">
                                     <input name="currently_working" type="checkbox" id="currently-working"
-                                        value="0" class="form-check-input" checked="false">
+                                        value="0" class="form-check-input">
                                     <label class="form-check-label" for="formCheck1">
                                         Currently Working
                                     </label>
@@ -146,8 +148,9 @@
                                     <select name="from_year" id="from_year_1" class="form-control chosen-select">
                                         <option value="">Select Year</option>
                                         @foreach ($yearsData as $key => $year)
-                                            <option value="{{ $year->year }}">
-                                                {{ $year->year }}</option>
+                                            @if ($year->year <= \Carbon\Carbon::now()->year)
+                                                <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -168,8 +171,9 @@
                                     <select id="to-year" name="to_year_1" class="form-control chosen-select" disabled="false">
                                         <option value="">Select Year</option>
                                         @foreach ($yearsData as $key => $year)
-                                            <option value="{{ $year->year }}">
-                                                {{ $year->year }}</option>
+                                            @if ($year->year <= \Carbon\Carbon::now()->year)
+                                                <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -204,12 +208,17 @@
             const toMonth = document.getElementById('to-month');
             const toYear = document.getElementById('to-year');
             if (isChecked) {
+                // console.log("checked");
                 $("#currently-working").val(1);
-                toMonth.disabled = isChecked;
-                toYear.disabled = isChecked;
+                // toMonth.disabled = isChecked;
+                // toYear.disabled = isChecked;
+
+                $("#to-month").prop('disabled', true);
+                $("#to-year").prop('disabled', true);
+                // $("#toYearDiv").addClass('hide');
             } else {
-                toMonth.disabled = false;
-                toYear.disabled = false;
+                $("#to-month").prop('disabled', false);
+                $("#to-year").prop('disabled', false);
             }
         });
 

@@ -3,15 +3,23 @@
 use App\Http\Controllers\v1\Admin\AdminController;
 use App\Http\Controllers\v1\Admin\AuthController as AdAuthController;
 use App\Http\Controllers\v1\Admin\PageMetaController;
+use App\Http\Controllers\v1\Admin\Pages\AdAboutPageController;
+use App\Http\Controllers\v1\Admin\Pages\AdHomePageController;
+use App\Http\Controllers\v1\Admin\Pages\AdTermsPolicyPageController;
 use App\Http\Controllers\v1\Admin\Pages\HomeSettingsController;
 use App\Http\Controllers\v1\Admin\WebSettingsController;
 use App\Http\Controllers\v1\Ajax\ValidationDataController;
+use App\Http\Controllers\v1\careepick\AboutUsPageController;
 use App\Http\Controllers\v1\careepick\ContactController;
+use App\Http\Controllers\v1\careepick\ContactUsPageController;
 use App\Http\Controllers\v1\careepick\EmployeeController;
+use App\Http\Controllers\v1\careepick\EmployeeSearchController;
 use App\Http\Controllers\v1\careepick\EmployerController;
+use App\Http\Controllers\v1\careepick\EmployerSearchController;
 use App\Http\Controllers\v1\careepick\HomePageController;
 use App\Http\Controllers\v1\careepick\JobApplyController;
 use App\Http\Controllers\v1\careepick\JobController;
+use App\Http\Controllers\v1\careepick\TermsPolicyPageController;
 use App\Http\Controllers\v1\employer\SocialLoginController;
 use App\Http\Controllers\v1\JobProvider\AuthController as JpAuthController;
 use App\Http\Controllers\v1\JobProvider\JobPostController;
@@ -20,6 +28,9 @@ use App\Http\Controllers\v1\JobSeeker\JobStatusNotificationController;
 use App\Http\Controllers\v1\JobSeeker\ResumeBuilderController;
 use App\Http\Controllers\v1\NotificationController;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 /*
@@ -205,6 +216,21 @@ Route::prefix('admin')->group(function () {
                 Route::get('/all-recruiters', 'recruitersPage')->name('all-recruiters-page');
                 Route::get('/all-employees', 'employeesPage')->name('all-employees-page');
             });
+
+            Route::controller(AdHomePageController::class)->group(function () {
+                Route::get('/home/hero-section', 'getHeroSection')->name('ad-home-page-hero-section');
+                Route::post('/home/hero-section/update', 'heroSectionUpdate')->name('ad-home-page-hero-section-update');
+            });
+
+            Route::controller(AdAboutPageController::class)->group(function () {
+                Route::get('/about-page', 'getAboutPage')->name('ad-about-page');
+                Route::post('/about-page/update', 'aboutPageUpdate')->name('ad-about-page-update');
+            });
+
+            Route::controller(AdTermsPolicyPageController::class)->group(function () {
+                Route::get('/terms-policy-page', 'getTermsPolicyPage')->name('ad-terms-policy-page');
+                Route::post('/terms-policy-page/update', 'termsPolicyPageUpdate')->name('ad-terms-policy-page-update');
+            });
         // });
     });
 });
@@ -224,6 +250,30 @@ Route::controller(HomePageController::class)->group(function () {
     // Route::get('/', 'index')->name('about');
     // Route::get('/', 'index')->name('career');
     // Route::get('/', 'index')->name('contact-us');
+});
+Route::controller(ContactUsPageController::class)->group(function () {
+    Route::get('/contact-us', 'index')->name('contact-us');
+    Route::post('/contact-us', 'storeContactForm')->name('contact-us-form');
+});
+Route::controller(AboutUsPageController::class)->group(function () {
+    Route::get('/about-us', 'index')->name('about-us');
+});
+Route::controller(TermsPolicyPageController::class)->group(function () {
+    Route::get('/terms-policy', 'index')->name('terms-policy');
+});
+
+Route::controller(EmployerSearchController::class)->group(function () {
+    Route::get('/search-employer', 'index')->name('search-employer');
+    Route::post('/filter-employer', 'filterCompanies')->name('filter-employer');
+    Route::get('/employer/{id}', 'getEmployer')->name('get-employer');
+});
+
+Route::middleware('jp_auth')->group(function () {
+    Route::controller(EmployeeSearchController::class)->group(function () {
+        Route::get('/search-employee', 'index')->name('search-employee');
+        Route::post('/filter-employee', 'filterEmployee')->name('filter-employee');
+        Route::get('/employee/{id}/resume', 'getEmployee')->name('get-employee');
+    });
 });
 
 Route::controller(EmployerController::class)->group(function () {

@@ -138,6 +138,54 @@ class Jobs extends Model
         return new Collection($processedData);
     }
 
+    public static function getLatestJobs($limit = null)
+    {
+        $processedData = [];
+        $query = self::with(['salaryType', 'experienceRange', 'ageRange', 'company', 'jobNature', 'jobSkills.skill']);
+
+        $query->orderBy('id', 'desc');
+
+        $query->limit($limit)->cursor()
+            ->each(function ($job) use (&$processedData) {
+            // $jobSkills = $job->jobSkills->map(function ($jobSkill) {
+            //     return $jobSkill->skill->skill_name;
+            // });
+            $jobSkills = $job->jobSkills->take(5)->map(function ($jobSkill) {
+                return $jobSkill->skill->skill_name;
+            });
+
+            $skillsString = '';
+            foreach($jobSkills as $key => $skillData) {
+                $skillsString = $skillsString . $skillData;
+                if (++$key != $jobSkills->count()) {
+                    $skillsString = $skillsString . ', ';
+                }
+            }
+
+
+            $processedData[] = (object) [
+                'id' => $job->id,
+                'job_category_id' => $job->job_category_id,
+                'job_title' => $job->job_title,
+                'deadline' => $job->deadline,
+                'vacancy' => $job->vacancy,
+                'job_location' => $job->job_location,
+                'responsibilities' => $job->responsibilities,
+                'salary' => $job->salary,
+                'slug' => $job->slug,
+                'salary_type_name' => optional($job->salaryType)->type,
+                'experience_range_name' => optional($job->experienceRange)->experience,
+                'age_range_name' => optional($job->ageRange)->age,
+                'company_name' => optional($job->company)->company_name,
+                'job_nature_name' => optional($job->jobNature)->nature,
+                'job_skills' => $jobSkills,
+                'skillsString' => $skillsString,
+            ];
+        });
+
+        return new Collection($processedData);
+    }
+
     public static function getJobsByCategory($id)
     {
         $processedData = [];

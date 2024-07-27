@@ -6,16 +6,16 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
 
-                    <h2 class="ipt-title">Grid Style Job 05</h2>
-                    <div class="breadcrumbs light">
+                    <h2 class="ipt-title">Job List</h2>
+                    {{-- <div class="breadcrumbs light">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="JavaScript:Void(0);">Home</a></li>
-                                <li class="breadcrumb-item"><a href="JavaScript:Void(0);">Candidate</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="JavaScript:Void(0);">Jobs</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Job Grid 05</li>
                             </ol>
                         </nav>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -276,14 +276,14 @@
                                             <span class="featured-text">Featured</span>
                                             <span class="urgent">Urgent</span>
                                         </div> --}}
-                                        <div class="jbs-grid-emp-head">
+                                        {{-- <div class="jbs-grid-emp-head">
                                             <div class="jbs-grid-emp-thumb">
                                                 <a href="{{ route('job-detail', ['slug' => $data->slug]) }}">
                                                     <figure><img src="{{ URL::asset('assets/img/l-1.png') }}" class="img-fluid" alt="">
                                                     </figure>
                                                 </a>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="jbs-grid-job-caption">
                                             <div class="jbs-job-employer-wrap"><span>{{ $data->company_name }}</span></div>
                                             <div class="jbs-job-title-wrap">
@@ -304,15 +304,18 @@
                                                         <i class="fa-regular fa-clock"></i>{{ $data->job_nature_name }}
                                                     </span>
                                                 </div>
-                                                <div class="jbs-grid-single-info"><span><i
-                                                            class="fa-solid fa-location-dot"></i>{{ $data->job_location }}</span></div>
+                                                {{-- <div class="jbs-grid-single-info">
+                                                    <span>
+                                                        <i class="fa-solid fa-location-dot"></i>{{ $data->job_location }}
+                                                    </span>
+                                                </div> --}}
                                             </div>
                                         </div>
-                                        <div class="jbs-grid-job-description my-2">
+                                        {{-- <div class="jbs-grid-job-description my-2">
                                             <a href="{{ route('job-detail', ['slug' => $data->slug]) }}" style="text-decoration:none; color:black">
                                                 <p>{{ Str::limit(strip_tags($data->responsibilities), 200) }}</p>
                                             </a>
-                                        </div>
+                                        </div> --}}
                                         <div class="jbs-grid-job-edrs">
                                             <div class="jbs-grid-job-edrs-group">
                                                 @foreach($data->job_skills as $key1 => $skillData)

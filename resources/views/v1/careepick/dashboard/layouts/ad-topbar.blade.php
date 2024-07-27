@@ -149,17 +149,11 @@
                     <i class="la la-home"></i> Home Page
                 </a>
                 <ul id="home-page-dropdown" class="navigation collapse">
-                    <li><a href="{{ route('ad-signout') }}"><i class="la la-paper-plane"></i>Hero Section</a></li>
+                    <li><a href="{{ route('ad-home-page-hero-section') }}"><i class="la la-paper-plane"></i>Hero Section</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="#" data-toggle="collapse" data-target="#about-page-dropdown" aria-expanded="false" aria-controls="about-page-dropdown">
-                    <i class="la la-home"></i> About Page
-                </a>
-                <ul id="about-page-dropdown" class="navigation collapse">
-                    <li><a href=""><i class="la la-paper-plane"></i>Meta Section</a></li>
-                </ul>
-            </li>
+            <li><a href="{{ route('ad-about-page') }}"><i class="la la-paper-plane"></i>About Page</a></li>
+            <li><a href="{{ route('ad-terms-policy-page') }}"><i class="la la-paper-plane"></i>Terms & Policy Page</a></li>
             <li><a href="{{ route('ad-signout') }}"><i class="la la-sign-out"></i>Logout</a></li>
         </ul>
     </div>

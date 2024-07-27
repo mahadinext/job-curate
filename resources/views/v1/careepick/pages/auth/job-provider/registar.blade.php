@@ -174,7 +174,7 @@
                                                     </div>
 
                                                     <div class="mb-4 col-md-4 col-sm-6 col-xs-12">
-                                                        <label>Company Logo <span class="text-danger">*</span></label>
+                                                        <label>Company Logo (200*67) <span class="text-danger">*</span></label>
                                                         <div class="custom-file-upload">
                                                             <input name="company_logo" class="mt-3" type="file"
                                                                 id="file" />

@@ -2,6 +2,7 @@
 
 namespace App\Models\v1\careepick\Recruiter;
 
+use App\Models\Jobs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,4 +47,10 @@ class Company extends Model
         'slug',
         'remarks',
     ];
+
+    // Define the relationship with the Jobs model
+    public function jobs()
+    {
+        return $this->hasMany(Jobs::class, 'company_id');
+    }
 }

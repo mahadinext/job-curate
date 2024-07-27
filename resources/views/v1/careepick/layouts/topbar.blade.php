@@ -30,16 +30,19 @@
 
                     <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="about-us.html">About Us</a></li>
-                            <li><a href="404.html">Error Page</a></li>
-                            <li><a href="privacy.html">Terms & Privacy</a></li>
-                            <li><a href="faq.html">FAQ's</a></li>
-                            <li><a href="contact.html">Contacts</a></li>
+                            <li><a href="{{ route('about-us') }}">About Us</a></li>
+                            <li><a href="{{ route('terms-policy') }}">Terms & Policy</a></li>
+                            <li><a href="{{ route('contact-us') }}">Contacts</a></li>
                         </ul>
                     </li>
 
-                    <li><a href="#">Help</a></li>
-
+                    @if (isset(app('jobSeeker')->id))
+                        <li><a href="{{ route('search-employer') }}">Search Employer</a></li>
+                    @endif
+                    
+                    @if ((isset(app('jobProvider')->id)))
+                        <li><a href="{{ route('search-employee') }}">Search Employee</a></li>
+                    @endif
                 </ul>
 
                 <ul class="nav-menu nav-menu-social align-to-right">

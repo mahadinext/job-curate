@@ -1,5 +1,5 @@
 <!-- ============================ Call To Action ================================== -->
-<section class="bg-cover call-action-container dark primary-bg-dark"
+{{-- <section class="bg-cover call-action-container dark primary-bg-dark"
     style="background:url(assets/img/footer-bg-dark.png)no-repeat;">
     <div class="container">
         <div class="row justify-content-center">
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 <!-- ============================ Call To Action End ================================== -->
 
 <!-- ============================ Footer Start ================================== -->
@@ -52,48 +52,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4">
+                <div class="col-lg-3 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title">For Clients</h4>
+                        <h4 class="widget-title">About Us</h4>
                         <ul class="footer-menu">
-                            <li><a href="JavaScript:Void(0);">Talent Marketplace</a></li>
-                            <li><a href="JavaScript:Void(0);">Payroll Services</a></li>
-                            <li><a href="JavaScript:Void(0);">Direct Contracts</a></li>
-                            <li><a href="JavaScript:Void(0);">Hire Worldwide</a></li>
-                            <li><a href="JavaScript:Void(0);">Hire in the USA</a></li>
-                            <li><a href="JavaScript:Void(0);">How to Hire</a></li>
+                            <li><a href="{{ route('about-us') }}">About Us</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-4">
+                <div class="col-lg-3 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title">Our Resources</h4>
+                        <h4 class="widget-title">Terms & Privacy</h4>
                         <ul class="footer-menu">
-                            <li><a href="JavaScript:Void(0);">Free Business tools</a></li>
-                            <li><a href="JavaScript:Void(0);">Affiliate Program</a></li>
-                            <li><a href="JavaScript:Void(0);">Success Stories</a></li>
-                            <li><a href="JavaScript:Void(0);">Upwork Reviews</a></li>
-                            <li><a href="JavaScript:Void(0);">Resources</a></li>
-                            <li><a href="JavaScript:Void(0);">Help & Support</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-widget">
-                        <h4 class="widget-title">The Company</h4>
-                        <ul class="footer-menu">
-                            <li><a href="JavaScript:Void(0);">About Us</a></li>
-                            <li><a href="JavaScript:Void(0);">Leadership</a></li>
-                            <li><a href="JavaScript:Void(0);">Contact Us</a></li>
-                            <li><a href="JavaScript:Void(0);">Investor Relations</a></li>
-                            <li><a href="JavaScript:Void(0);">Trust, Safety & Security</a></li>
+                            <li><a href="{{ route('terms-policy') }}">Terms & Privacy</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget">
+                        <h4 class="widget-title">Contact Us</h4>
+                        <ul class="footer-menu">
+                            <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                {{-- <div class="col-lg-3 col-md-6">
                     <div class="footer-widget">
                         <h4 class="widget-title">Download Apps</h4>
                         <div class="app-wrap">
@@ -103,7 +89,7 @@
                                         alt=""></a></p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

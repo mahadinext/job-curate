@@ -155,7 +155,7 @@ class ResumeBuilderController extends Controller
         return view('v1.careepick.dashboard.job-seeker.resume-builder', $data);
     }
 
-    private function getNecessaryData($jobSeekerId = null)
+    protected function getNecessaryData($jobSeekerId = null)
     {
         $jobSeekerId = ($jobSeekerId != null) ? $jobSeekerId : app('jobSeeker')->id;
         if (isset(app('jobSeeker')->id)) {
@@ -262,6 +262,11 @@ class ResumeBuilderController extends Controller
         ];
 
         return $data;
+    }
+
+    public function fetchNecessaryData($id)
+    {
+        return $this->getNecessaryData($id);
     }
 
     private function calculateDuration($startMonth, $startYear, $endMonth, $endYear)
@@ -504,6 +509,7 @@ class ResumeBuilderController extends Controller
                     $changesToSave = $this->checkForDirtyData($jobSeekerExperiences);
                     if (!empty($changesToSave)) {
                         JobSeekerExperiences::where('id', $request->experience_id)->update($changesToSave);
+                        JobSeeker::calculateTotalExperience(app('jobSeeker')->id);
                         return redirect()->back()->with('add-work-xp-message', "Work experience updated successfully");
                     }
                     return redirect()->back();
@@ -526,6 +532,7 @@ class ResumeBuilderController extends Controller
                 }
 
                 JobSeekerExperiences::create($jobSeekerWorkExperienceArray);
+                JobSeeker::calculateTotalExperience(app('jobSeeker')->id);
                 return redirect()->back()->with('add-work-xp-message', "Work experience added successfully");
             }
         } catch (Exception $e) {

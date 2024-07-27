@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('jobseeker_phone_no_1');
             $table->string('jobseeker_phone_no_2')->nullable();
             $table->integer('jobseeker_status')->default(1);
+            $table->double('total_experience')->nullable();
             $table->string('slug')->unique()->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();

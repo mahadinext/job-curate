@@ -10,9 +10,10 @@ class PageMetaController extends Controller
 {
     protected $pages = [
         'home' => 'Home Page',
-        'about' => 'About Page',
+        'about-us' => 'About Page',
         'career' => 'Career Page',
         'contact-us' => 'Contact Us Page',
+        'terms-policy' => 'Terms & Policy Page',
         // Add other pages as necessary
     ];
 

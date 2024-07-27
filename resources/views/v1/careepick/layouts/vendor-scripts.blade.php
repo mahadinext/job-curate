@@ -22,7 +22,8 @@
 
 <!-- ckeditor -->
 {{-- <script src="{!! asset('admin/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') !!}"></script> --}}
-<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/super-build/ckeditor.js') }}"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/super-build/ckeditor.js'"></script>
+
 {{-- <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js') }}"></script> --}}
 <!--
     Uncomment to load the Spanish translation
@@ -200,6 +201,8 @@
                 ],
                 shouldNotGroupWhenFull: true
             },
+            placeholder: 'Type or paste your content here!',
+            plugins: [AccessibilityHelp, Autosave, Bold, Essentials, Italic, Mention, Paragraph, SelectAll, SlashCommand, Undo],
             list: {
                 properties: {
                     styles: true,
@@ -277,7 +280,6 @@
                     }
                 ]
             },
-
             removePlugins: [
                 'CKBox',
                 'CKFinder',

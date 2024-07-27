@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\v1\careepick;
 
-use Exception;
+use App\Http\Controllers\Controller;
 use App\Models\Jobs;
-use Illuminate\View\View;
+use App\Models\Pages;
+use App\Models\v1\careepick\JobCategory;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Models\v1\careepick\JobCategory;
+use Illuminate\View\View;
 
 class HomePageController extends Controller
 {
@@ -20,18 +21,29 @@ class HomePageController extends Controller
     public function index(): view
     {
         try {
+            $homePageContents = [];
             $jobCategoryData = JobCategory::withCount('jobs')->get();
             $jobsByExperience = Jobs::getTotalJobsByExperience();
-            $jobsBySkill = Jobs::getTotalJobsBySkills();
+            // $jobsBySkill = Jobs::getTotalJobsBySkills();
             $jobsByJobNature = Jobs::getTotalJobsByJobType();
             $jobsByJobPlace = Jobs::getTotalJobsByJobPlace();
+
+            $homePage = Pages::where('page_name', 'home')->first();
+            $heroSection = json_decode($homePage->page_contents, true)['hero_section'];
+
+            $counts = Pages::where('page_name', 'count')->first();
+
+            $latestJobsData = Jobs::getLatestJobs(8);
 
             $data = [
                 'jobCategoryData' => $jobCategoryData,
                 'jobsByExperience' => $jobsByExperience,
-                'jobsBySkill' => $jobsBySkill,
+                // 'jobsBySkill' => $jobsBySkill,
                 'jobsByJobNature' => $jobsByJobNature,
                 'jobsByJobPlace' => $jobsByJobPlace,
+                'heroSection' => $heroSection,
+                'counts' => json_decode($counts->page_contents, true),
+                'latestJobsData' => $latestJobsData,
             ];
 
             return view('v1.careepick.pages.common.home', $data);

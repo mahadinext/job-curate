@@ -29,4 +29,9 @@ class JobSeekerExperiences extends Model
         'slug',
         'remarks',
     ];
+
+    public function jobSeeker()
+    {
+        return $this->belongsTo(JobSeeker::class, 'job_seeker_id');
+    }
 }
