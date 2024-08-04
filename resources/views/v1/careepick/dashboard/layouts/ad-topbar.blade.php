@@ -139,9 +139,6 @@
                     <li><a href="{{ route('web-logo-page') }}"><i class="la la-paper-plane"></i>Web Logo</a></li>
                     <li><a href="{{ route('web-info-page') }}"><i class="la la-paper-plane"></i>Web Info</a></li>
                     <li><a href="{{ route('meta.index') }}"><i class="la la-paper-plane"></i>Meta Info</a></li>
-                    <li><a href="{{ route('ad-signout') }}"><i class="la la-user"></i> Profile Settings</a></li>
-                    <li><a href="{{ route('ad-signout') }}"><i class="la la-key"></i> Account Settings</a></li>
-                    <li><a href="{{ route('ad-signout') }}"><i class="la la-lock"></i> Privacy Settings</a></li>
                 </ul>
             </li>
             <li>

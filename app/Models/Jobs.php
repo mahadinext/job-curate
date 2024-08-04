@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use Exception;
 use App\Models\SalaryType;
-use Illuminate\Support\Collection;
-use App\Models\v1\careepick\Skills;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\v1\careepick\JobCategory;
-use App\Models\v1\careepick\Recruiter\Company;
-use App\Models\v1\careepick\JobSeeker\SavedJobs;
 use App\Models\v1\careepick\JobSeeker\AppliedJobs;
+use App\Models\v1\careepick\JobSeeker\SavedJobs;
+use App\Models\v1\careepick\Recruiter\Company;
+use App\Models\v1\careepick\Skills;
 use App\Models\v1\careepick\Status;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class Jobs extends Model
 {
@@ -95,6 +96,11 @@ class Jobs extends Model
     public function status()
     {
         return $this->belongsTo(Status::class, 'job_status');
+    }
+
+    public function appliedJobs()
+    {
+        return $this->belongsTo(AppliedJobs::class, 'id', 'job_id');
     }
 
     public static function getAllJobs($savedJobIds = [])
@@ -430,6 +436,50 @@ class Jobs extends Model
                     'total_jobs' => $job->total_jobs,
                 ];
             });
+
+        return new Collection($processedData);
+    }
+
+    public static function getEmployeeAppliedJobs($id)
+    {
+        $processedData = [];
+
+        self::with(['appliedJobs','salaryType','experienceRange','ageRange','company','jobNature','jobSkills.skill','status'])
+        ->whereHas('appliedJobs', function ($query) use ($id) {
+            $query->where('js_id', $id);
+        })
+        ->chunk(100, function ($jobs) use (&$processedData) {
+            foreach ($jobs as $job) {
+                $jobSkills = $job->jobSkills->take(5)->map(function ($jobSkill) {
+                    return $jobSkill->skill->skill_name;
+                });
+                // dd($jobs);
+
+                $processedData[] = (object) [
+                    'id' => $job->id,
+                    'job_category_id' => $job->job_category_id,
+                    'job_title' => $job->job_title,
+                    'deadline' => $job->deadline,
+                    'job_location' => $job->job_location,
+                    'responsibilities' => $job->responsibilities,
+                    'salary' => $job->salary,
+                    'slug' => $job->slug,
+                    'salary_type_name' => optional($job->salaryType)->type,
+                    'experience_range_name' => optional($job->experienceRange)->experience,
+                    'age_range_name' => optional($job->ageRange)->age,
+                    'company_name' => optional($job->company)->company_name,
+                    'job_nature_name' => optional($job->jobNature)->nature,
+                    'job_skills' => $jobSkills,
+                    'status' => optional($job->status)->name,
+                    'applied_at' => $job->appliedJobs->created_at,
+                ];
+            }
+        });
+
+        // Sort the processed data by applied_at in descending order
+        usort($processedData, function ($a, $b) {
+            return strtotime($b->applied_at) - strtotime($a->applied_at);
+        });
 
         return new Collection($processedData);
     }

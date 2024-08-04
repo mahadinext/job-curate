@@ -260,7 +260,7 @@
                                 <span class="featured-text">vacancy: {{ $data->vacancy }}</span>
                                 {{-- <span class="urgent">Urgent</span> --}}
                             </div>
-                            <div class="brows-job-type"><span class="enternship">⏱<i class="fa-regular fa-clock"></i> {{ $data->deadline }}</span></div>
+                            <div class="brows-job-type"><span class="enternship"><i class="fa-regular fa-clock"></i> {{ $data->deadline }}</span></div>
                             <div class="job-instructor-thumb">
                                 {{-- <a href="job-detail.html"><img src="{{ URL::asset('assets/img/l-1.png') }}" class="img-fluid" alt=""></a> --}}
                             </div>
